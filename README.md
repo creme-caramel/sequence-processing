@@ -1,14 +1,14 @@
-# Assay
+# Sequence-processing
 
 * Quantifies somatic DNA mutations
 * Exports results to db/csv
 
-### How to compile
+### To compile
 
     make clean
     make
 
-### Usage
+### To run
 
     ./main /path/to/reads_data.fna Mid_number
 

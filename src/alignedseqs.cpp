@@ -7,7 +7,6 @@
  * group consensus
  */
 
-// For each group's alignedXX.aln
 template <class Seq>
 inline void AlignedSeqs<Seq>::find_group_consensus(ifstream& file, int group)
 {
@@ -35,9 +34,6 @@ inline void AlignedSeqs<Seq>::find_group_consensus(ifstream& file, int group)
 				C++;
 			else
 				dash++;
-				//flaw if non noramal base pairs used
-				//generate a list of numbers and there corisponding leters
-				//return the most common if greater then __%
 		}
 		if (A >= minforcons)
 			tempConStr += "A";
@@ -103,9 +99,6 @@ void AlignedSeqs<Seq>::find_uber_consensus(ifstream& file)
 				C++;
 			else
 				dash++;
-			//flaw if non noramal base pairs used
-			//generate a list of numbers and there corisponding leters
-			//return the most common if greater then __%
 		}
 		if (A >= minforcons)
 			tempConStr += "A";
@@ -128,7 +121,7 @@ template <class Seq>
 void AlignedSeqs<Seq>::write_group_with_consensus(ofstream& file, int groupnum)
 {
 	Seq tempSeq;
-	// assert((int)groups.size() >= group); // why?
+	// assert((int)groups.size() >= group);
 
 	for (int i = 0; i < (int)ConsRef.size(); i++) {
 		tempSeq = ConsRef.at(i);
@@ -164,7 +157,7 @@ void AlignedSeqs<Seq>::read_group_with_consensus(ifstream& file)
 template <class Seq>
 void AlignedSeqs<Seq>::group_mut_hunt(int group)
 {
-	int truepos = 16534;//16534 firts
+	int truepos = 16534;
 	int truedes = 0;
 	int tempcount = 0;
 	string tempmutation;
@@ -220,12 +213,10 @@ cout << tempdata.posision << "\t" << tempdata.subposition << "\t" << tempdata.mu
 							tempcount++;
 						}
 					}
-					//write to mutation datatype
 					tempmutation = ConsGroups.at(group).at(1).basepairs[i];
 					tempmutation += " to :";
 					tempgroup = ConsGroups.at(group).at(2).basepairs.substr(35, 16);
 					Mutation tempdata(truepos, truedes, tempmutation, tempgroup, (group + 1), tempcount, ConsGroups.at(group).size() - 3);
-					//std::cout << truepos << "." <<truedes <<endl;
 
 cout << tempdata.posision << "\t" << tempdata.subposition << "\t" << tempdata.mutation << "\t" << tempdata.groupnum << "\t" << tempdata.FrequencyOfMutation << "\t" << tempdata.SizeOfGroup << endl;
 					OutputData.insert(tempdata);
@@ -242,30 +233,18 @@ cout << tempdata.posision << "\t" << tempdata.subposition << "\t" << tempdata.mu
 						tempcount++;
 					}
 				}
-				//write to mutation datatype
 				tempmutation = ": to ";
 				tempmutation += ConsGroups.at(group).at(2).basepairs[i];
 				tempgroup = ConsGroups.at(group).at(2).basepairs.substr(35, 16);
 				Mutation tempdata(truepos, truedes, tempmutation, tempgroup, (group + 1), tempcount, ConsGroups.at(group).size() - 3);
 
 cout << tempdata.posision << "\t" << tempdata.subposition << "\t" << tempdata.mutation << "\t" << tempdata.groupnum << "\t" << tempdata.FrequencyOfMutation << "\t" << tempdata.SizeOfGroup << endl;
-				//std::cout << truepos << "." <<truedes <<endl;
 				OutputData.insert(tempdata);
-				//*/
 				tempcount = 0;
 			}
 		}
-		/*in progress
-		if(counting==0)
-		{
-		Mutation tempdata(temppos,tempdes,tempmutation,tempgroup,(group+1),tempcount1,ConsGroups.at(group).size()-3);
-		}
-		*/
-		//}
 	}
 }
-
-////////////////////////////////////////////////////////////////////////////////////////
 
 template <class Seq>
 int AlignedSeqs<Seq>::align_each_group_consenses(const int numgroups, const string& path)
@@ -328,7 +307,6 @@ int AlignedSeqs<Seq>::read_reference(const char *filename)
 							line2 += line3;
 						}
 					} while (line3[0] != greaterthen[0] && line3 != "end." && breakout<100);
-// ??? should initiate properly
 					tempSeq.description = line;
 					tempSeq.basepairs = line2;
 					ConsRef.push_back(tempSeq);
@@ -375,7 +353,7 @@ int AlignedSeqs<Seq>::align_uber_consenses(const int numgroups, const string& pa
 		if (!open_infile(infile, aln)) {
 			cout << "unable to open file: " << aln << endl;
 			return 0;
-		}		
+		}
 		read_group_with_consensus(infile);
 		infile.close();
 
@@ -400,57 +378,39 @@ int AlignedSeqs<Seq>::write_mutations_to_file(const string& path)
 	if (!open_outfile(file, filename)) {
 		cout << "unable to open file: " << filename << endl;
 		return 0;
-	}	
+	}
 
 	Mutation temp1, temp2, temp3;
 		file << "Mitomap consensusdna position,Mutated to,Template number,Mutation frequence in template consensus seq,# seq that make up template consensus seq,Template number,Mutation frequence in template consensus seq,# seq that make up template consensus seq,Template number,Mutation frequence in template consensus seq,# seq that make up template consensus seq\n";
 		temp1 = *OutputData.begin();
 
-		//file<<to_string(temp1.posision)<<"."<<to_string(temp1.subposition)<<","<<temp1.mutation<<","<<to_string(temp1.groupNum)<<","<<to_string(temp1.FrequencyOfMutation)<<","<<to_string(temp1.SizeOfGroup);
-
-		if (temp1.subposition<10)
-		{
-
+		if (temp1.subposition<10) {
 			file << "\n" << to_string(temp1.posision) << "." << "00" << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
-
 		}
-		else if (temp1.subposition<100)
-		{
+		else if (temp1.subposition<100) {
 			file << "\n" << to_string(temp1.posision) << "." << "0" << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
 		}
-		else
-		{
+		else {
 			file << "\n" << to_string(temp1.posision) << "." << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
 		}
 
-		for (set<Mutation>::iterator it = (++OutputData.begin()); it != OutputData.end(); ++it)
-		{
+		for (set<Mutation>::iterator it = (++OutputData.begin()); it != OutputData.end(); ++it) {
 			temp3 = *it;
-			//if(temp3.SizeOfGroup>5 && (double)temp3.FrequencyOfMutation/(double)temp3.SizeOfGroup > 0.5)
 			if ((double)temp3.FrequencyOfMutation / (double)temp3.SizeOfGroup > 0.5)
 			{
 				temp2 = temp1;
 				temp1 = temp3;
-
-				if (temp1.posision == temp2.posision && temp1.subposition == temp2.subposition && temp1.mutation == temp2.mutation)
-				{
+				if (temp1.posision == temp2.posision && temp1.subposition == temp2.subposition && temp1.mutation == temp2.mutation) {
 					file << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
-
 				}
-				else
-				{
-					if (temp1.subposition<10)
-					{
-
+				else {
+					if (temp1.subposition<10) {
 						file << "\n" << to_string(temp1.posision) << "." << "00" << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
-
 					}
-					else if (temp1.subposition<100)
-					{
+					else if (temp1.subposition<100) {
 						file << "\n" << to_string(temp1.posision) << "." << "0" << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
 					}
-					else
-					{
+					else {
 						file << "\n" << to_string(temp1.posision) << "." << to_string(temp1.subposition) << "," << temp1.mutation << "," << to_string(temp1.groupnum) << "," << to_string(temp1.FrequencyOfMutation) << "," << to_string(temp1.SizeOfGroup);
 					}
 				}

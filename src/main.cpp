@@ -5,9 +5,9 @@
 #include <assert.h>
 using namespace std;
 
-const char * reference = "/home/mimi/Desktop/Dloopref.fna";
+const char * reference = "Dloopref.fna";
 const string mid_to_string(const char *num_str);
-	
+
 int main(int argc, const char* argv[])
 {
 	assert(argc == 3);

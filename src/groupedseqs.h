@@ -25,7 +25,7 @@ using namespace std;
 template <typename Seq>
 class GroupedSeqs {
 protected:
-	set<Seq> seqs_for_groups; // how to clean mem of the set?
+	set<Seq> seqs_for_groups;
 	vector<Seq> seqs_too_short;
 	vector<Seq> seqs_ungrouped;
 	vector<Seq> seqs_mutated_id;
@@ -34,8 +34,7 @@ protected:
 
 	friend int open_infile(ifstream&, const char*);
 	friend int open_outfile(ofstream&, string&);
-
-	void init_seq_parsed(Seq&, string, string, string); // depending on data type
+	void init_seq_parsed(Seq&, string, string, string);
 
 	void writegroupsize(ofstream& file) {
 		int intsize;
@@ -71,12 +70,12 @@ protected:
 public:
 	GroupedSeqs() : numgroups(0) {}
 	~GroupedSeqs() {}
-
-	void read_file_to_seqs(const char *, const string); // depending on data type
+	void read_file_to_seqs(const char *, const string);
 
 	/*
 	 * also erases defined seqs from the seqs_for_groups
 	 */
+
 	inline int define_and_write_each_group(const string& path) {
 		vector<Seq> seqs_for_groups_copy;
 		Seq tempseq1, tempseq2;
@@ -86,7 +85,7 @@ public:
 		tempseq2 = *it;
 	
 		do {
-			seqs_for_groups_copy.push_back(tempseq2); // re-order again??
+			seqs_for_groups_copy.push_back(tempseq2);
 			seqs_for_groups.erase(it);
 			if (!seqs_for_groups.empty()) {
 				it = seqs_for_groups.begin();
@@ -97,12 +96,7 @@ public:
 		int numb;
 		numb = seqs_for_groups_copy.size();
 		sizes.push_back(numb);
-	/*
-		if (numb>100 || numb<0)
-		{
-			cout << "OOPS 100 error" << endl;
-		}
-	*/
+
 		ofstream file;
 		if (seqs_for_groups_copy.size() > 1) {
 			numgroups++;
